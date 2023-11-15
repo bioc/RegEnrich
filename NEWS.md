@@ -1,3 +1,6 @@
+# RegEnrich 1.13.1
+* Fix the bug of re-building the vignette on Windows.
+
 # RegEnrich 1.3.1
 * Change the email from w.tao-2@umcturecht.nl to weiyangtao1513@gmail.com
 

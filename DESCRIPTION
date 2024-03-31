@@ -1,7 +1,7 @@
 Package: RegEnrich
 Type: Package
 Title: Gene regulator enrichment analysis
-Version: 1.13.1
+Version: 1.13.2
 Authors@R: c(
     person("Weiyang", "Tao", email = "weiyangtao1513@gmail.com", 
         role = c("cre", "aut")),
@@ -53,14 +53,14 @@ Imports:
     ggplot2 (>= 2.2.0),
     methods,
     reshape2,
-    magrittr
+    magrittr,
+    BiocStyle
 Suggests: 
     GEOquery,
     rmarkdown,
     knitr,
     BiocManager,
-    testthat,
-    BiocStyle
+    testthat
 biocViews:
     GeneExpression, Transcriptomics, RNASeq, TwoChannel, 
     Transcription, GeneTarget, NetworkEnrichment,

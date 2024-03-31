@@ -1,3 +1,8 @@
+# RegEnrich 1.13.4
+* Fix a bug in GRN.R
+* Fix a bug in DEA_LRT_DESeq2
+* Move BiocStyle to Imports
+
 # RegEnrich 1.13.1
 * Fix the bug of re-building the vignette on Windows.
 

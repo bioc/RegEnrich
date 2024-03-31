@@ -318,8 +318,9 @@ DEA_LRT_DESeq2 = function(expr, pData, test = c("Wald", "LRT"),
         "greater", "less"), listValues = c(1, -1), cooksCutoff,
     independentFiltering = TRUE, alpha = 0.1, filter, theta,
     filterFun, addMLE = FALSE, blind = FALSE) {
-    
+
     fitType = match.arg(fitType)
+    altHypothesis = match.arg(altHypothesis)
     expr = as.matrix(expr)
     object = DESeqDataSetFromMatrix(countData = expr, colData = pData,
         design = full)
@@ -461,7 +462,7 @@ DEA_LRT_LM = function(expr, pData, full, reduced, weights = NULL) {
 #' to the terms of
 #' the design formula. If design is a model matrix, then pData is not used.
 #' Default is NULL.
-#' @return the names of contrast parameter (list of character format) that 
+#' @return the names of contrast parameter (list of character format) that
 #' \code{\link{regenrich_diffExpr}} and \code{\link{results}}
 #' function can use, and it is the same as the value that
 #' \code{\link{resultsNames}} function returns.

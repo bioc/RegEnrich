@@ -1,7 +1,7 @@
 Package: RegEnrich
 Type: Package
 Title: Gene regulator enrichment analysis
-Version: 1.22.0
+Version: 1.22.1
 Authors@R: c(
     person("Weiyang", "Tao", email = "weiyangtao1513@gmail.com", 
         role = c("cre", "aut")),
@@ -45,6 +45,9 @@ Collate:
 Imports: 
     randomForest,
     fgsea,
+    enrichit,
+    qvalue,
+    gson,
     DOSE,
     BiocParallel,
     DESeq2,

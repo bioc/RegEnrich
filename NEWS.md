@@ -1,3 +1,6 @@
+# RegEnrich 1.22.1
+* Fixed a bug related to enricher_internal function.
+
 # RegEnrich 1.13.4
 * Fix a bug in GRN.R
 * Fix a bug in DEA_LRT_DESeq2

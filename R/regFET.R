@@ -4,8 +4,19 @@
 setGeneric("regFET", def = function(object, ...) standardGeneric("regFET"))
 
 
+network2gson = function(network, species = "UNKNOWN", version = format(Sys.Date(), "%Y_%m_%d")){
+  reg = rep(names(network), vapply(network, length, c(1)))
+  target = unname(do.call(c, network))
+  
+  gsid2gene <- data.frame(gsid = reg,  gene = target, row.names = 1:length(reg))
+  gsid2name <- unique(data.frame(gsid=names(network), name=names(network)))
+  
+  gson::gson(gsid2gene=gsid2gene, gsid2name=gsid2name, species=species, version=version)
+}
+
+
 .regFET = function(object, namedScores, namedScoresCutoffs = 0.05,
-                   minSize = 5, maxSize = 5000, pvalueCutoff = 0.05, 
+                   minSize = 5, maxSize = 5000, pvalueCutoff = 0.05,
                    pAdjustMethod = "BH",
                    qvalueCutoff = 0.2, regAltName = NULL, universe = NULL) {
   netTable = object@elementset
@@ -21,33 +32,48 @@ setGeneric("regFET", def = function(object, ...) standardGeneric("regFET"))
   
   stopifnot(length(network) == length(regAltName))
   
-  # The data format for enricher_internal()
-  netENV = list(PATHID2NAME = stats::setNames(names(network), regAltName), 
-                EXTID2PATHID = tarReg, PATHID2EXTID = network)
-  netENV = as.environment(netENV)
-  
   topGene = names(namedScores[namedScores <= namedScoresCutoffs])
-  
-  # Fisher exact test
-  enricher_internal = utils::getFromNamespace("enricher_internal", ns = "DOSE")
-  y = enricher_internal(gene = topGene, pvalueCutoff = 1,
-                        pAdjustMethod = pAdjustMethod, universe = universe,
-                        minGSSize = minSize,
-                        maxGSSize = maxSize, qvalueCutoff = 1, USER_DATA = netENV)
+  if(packageVersion("DOSE") < "4.5.1"){
+    # The data format for enricher_internal()
+    netENV = list(PATHID2NAME = stats::setNames(names(network), regAltName),
+                  EXTID2PATHID = tarReg, PATHID2EXTID = network)
+    netENV = as.environment(netENV)
+    
+    # Fisher exact test
+    enricher_internal = utils::getFromNamespace("enricher_internal", ns = "DOSE")
+    y = enricher_internal(gene = topGene, pvalueCutoff = 1,
+                          pAdjustMethod = pAdjustMethod, universe = universe,
+                          minGSSize = minSize,
+                          maxGSSize = maxSize, qvalueCutoff = 1, USER_DATA = netENV)
+  } else {
+    # The data format for enrichit package
+    gson_obj = network2gson(network)
+    
+    # Fisher exact test
+    y = enrichit::ora_gson(gene = topGene,
+                           pvalueCutoff = 1,
+                           pAdjustMethod=pAdjustMethod,
+                           universe = universe,
+                           minGSSize=minSize,
+                           maxGSSize=maxSize,
+                           qvalueCutoff=1,
+                           gson = gson_obj)
+  }
   
   # The results to show
-  newEnrich(topResult = as_tibble(y@result[(y@result$pvalue <= pvalueCutoff) & 
-                                   (y@result$p.adjust <= pvalueCutoff) &
-                                   (y@result$qvalue <= qvalueCutoff), ]), 
-            allResult = as_tibble(y@result), 
+  newEnrich(topResult = as_tibble(y@result[(y@result$pvalue <= pvalueCutoff) &
+                                             (y@result$p.adjust <= pvalueCutoff) &
+                                             (y@result$qvalue <= qvalueCutoff), ]),
+            allResult = as_tibble(y@result),
             gene = y@gene, namedScores = namedScores, type = "FET")
-  # new(Class = "Enrich", 
-  #     topResult = y@result[(y@result$pvalue <= pvalueCutoff) & 
+  # new(Class = "Enrich",
+  #     topResult = y@result[(y@result$pvalue <= pvalueCutoff) &
   #                            (y@result$p.adjust <= pvalueCutoff) &
-  #                            (y@result$qvalue <= qvalueCutoff), ], 
+  #                            (y@result$qvalue <= qvalueCutoff), ],
   #     allResult = y@result,
   #     gene = y@gene, namedScores = namedScores, type = "FET")
 }
+
 
 # Enrichment analysi by Fisher's exact test.
 # @description Enrichment for regulators based on Fisher exact test.

@@ -1,3 +1,6 @@
+# RegEnrich 1.23.1
+* Fix a bug caused by upgrade of DOSE package (enricher_internal function)
+
 # RegEnrich 1.13.4
 * Fix a bug in GRN.R
 * Fix a bug in DEA_LRT_DESeq2

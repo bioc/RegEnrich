@@ -1,5 +1,6 @@
 # RegEnrich 1.22.1
 * Fixed a bug related to enricher_internal function.
+* Fixed a bug in the test script.
 
 # RegEnrich 1.13.4
 * Fix a bug in GRN.R

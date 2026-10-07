@@ -533,7 +533,7 @@ if (!requireNamespace("GEOquery"))
  BiocManager::install("GEOquery")
 
 library(GEOquery)
-eset <- getGEO(GEO = "GSE31193")[[1]]
+eset <- getGEO(GEO = "GSE31193", returnType = "ExpressionSet")[[1]]
 ```
 
 
@@ -650,7 +650,7 @@ First, we can read the sample information using `GEOquery` package.
 
 ```{r case2ReadData1, message = FALSE}
 library(GEOquery)
-eset <- getGEO(GEO = "GSE130567")[[1]]
+eset <- getGEO(GEO = "GSE130567", returnType = "ExpressionSet")[[1]]
 pdata = pData(eset)[, c("title", "geo_accession", "cultured in:ch1", "treatment:ch1")]
 colnames(pdata) = c("title", "accession", "cultured", "treatment")
 pData(eset) = pdata

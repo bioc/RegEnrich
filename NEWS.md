@@ -1,3 +1,6 @@
+# RegEnrich 1.23.2
+* Fix a bug caused by upgrade of GEOquery package (getGEO function)
+
 # RegEnrich 1.23.1
 * Fix a bug caused by upgrade of DOSE package (enricher_internal function)
 

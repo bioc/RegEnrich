@@ -1,3 +1,6 @@
+# RegEnrich 1.23.3
+* Fix a bug caused by downloading data.
+
 # RegEnrich 1.23.2
 * Fix a bug caused by upgrade of GEOquery package (getGEO function)
 

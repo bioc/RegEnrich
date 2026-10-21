@@ -528,7 +528,7 @@ fData(eset) <- data.frame(Symbol=Symbol)
 
 The simplist way to read the data is using `GEOquery` library. To use this library, you must
 have this package installed.
-```{r case1ReadData1_2, warning=FALSE, message=FALSE}
+```{r case1ReadData1_2, warning=FALSE, message=FALSE, eval=FALSE}
 if (!requireNamespace("GEOquery"))
  BiocManager::install("GEOquery")
 
@@ -540,7 +540,7 @@ eset <- getGEO(GEO = "GSE31193")[[1]]
 This dataset contains samples treated with IL28B, but here we are focusing on only control samples
 and samples after 6 and 24 h IFN-α treatment.
 
-```{r case1ReadData1_3}
+```{r case1ReadData1_3, eval=FALSE}
 # Samples information
 pd0 = pData(eset)
 pd = pd0[, c("title", "time:ch1", "agent:ch1")]
@@ -565,7 +565,7 @@ probeGene = fData(eset_IFN)[, "Gene Symbol", drop = FALSE]
 
 Here to simplify the analysis, if there are multiple probes matching a gene,
 we use only one probe with higher average expression value to represent this gene.
-```{r case1ReadData1_4}
+```{r case1ReadData1_4, eval=FALSE}
 probeGene$meanExpr = rowMeans(exprs(eset_IFN))
 probeGene = probeGene[order(probeGene$meanExpr, decreasing = TRUE),]
 
@@ -582,7 +582,7 @@ to quickly illustrate how to use RegEnrich, here we randomly take only 5,000 gen
 for analysis. If you would like to see the real result in the analysis, then the
 following data subsetting step should be discarded.
 
-```{r case1ReadData1_5}
+```{r case1ReadData1_5, eval=FALSE}
 set.seed(1234)
 data = data[sample(1:nrow(data), 5000), ]
 ```
@@ -591,7 +591,7 @@ data = data[sample(1:nrow(data), 5000), ]
 Here we would like to know which regulators play key roles in primary human hepatocytes
 after *24 h* treatment with IFN-α.
 
-```{r case1RegEnrichAnalyais, message=FALSE}
+```{r case1RegEnrichAnalyais, message=FALSE, eval=FALSE}
 expressionMatrix = exprs(data) # expression data
 # rownames(expressionMatrix) = probeGene_noDu$`Gene Symbol`
 sampleInfo = pData(data) # sample information
@@ -621,7 +621,7 @@ object = regenrich_diffExpr(object) %>%
 ```
 
 
-```{r case1RegEnrichResults, message=FALSE}
+```{r case1RegEnrichResults, message=FALSE, eval=FALSE}
 res = results_score(object)
 res
 ```
@@ -648,7 +648,7 @@ analysis.
 Since the sample information and raw read counts data are archived seperately in GEO database.
 First, we can read the sample information using `GEOquery` package.
 
-```{r case2ReadData1, message = FALSE}
+```{r case2ReadData1, message = FALSE, eval=FALSE}
 library(GEOquery)
 eset <- getGEO(GEO = "GSE130567")[[1]]
 pdata = pData(eset)[, c("title", "geo_accession", "cultured in:ch1", "treatment:ch1")]
@@ -666,7 +666,7 @@ sampleInfo$treatment = factor(rep(c("Resting", "IFNG"), each = 3),
 ```
 
 Second, download read count file and decompose into a temporary folder.
-```{r case2DownloadReads, message=FALSE, warning=FALSE}
+```{r case2DownloadReads, message=FALSE, warning=FALSE, eval=FALSE}
 tmpFolder = tempdir()
 tmpFile = tempfile(pattern = "GSE130567_", tmpdir = tmpFolder, fileext = ".tar")
 download.file("https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE130567&format=file",
@@ -678,7 +678,7 @@ filesFull = file.path(tmpFolder, files)
 
 
 Then read the raw read counts in these files.
-```{r case2ReadData2, message=FALSE, warning=FALSE}
+```{r case2ReadData2, message=FALSE, warning=FALSE, eval=FALSE}
 dat = list()
 for (file in filesFull){
   accID = gsub(".*(GSM\\d{7}).*", "\\1", file)
@@ -704,14 +704,14 @@ edata = edata[rowMeans(edata) > 1,]
 Similar to the case 1, here we randomly take only 5,000 genes to quickly illustrate how to use
 RegEnrich, but to see the real result from the analysis, you should neglect the following step.
 
-```{r case2ReadData1_3}
+```{r case2ReadData1_3, eval=FALSE}
 set.seed(1234)
 edata = edata[sample(1:nrow(edata), 5000), ]
 ```
 
 
 ### RegEnrich analysis
-```{r case2RegEnrich}
+```{r case2RegEnrich, eval=FALSE}
 expressionMatrix = as.matrix(edata) # expression data
 
 design = ~ treatment
@@ -739,7 +739,7 @@ object = regenrich_diffExpr(object) %>%
 ```
 
 
-```{r case2RegEnrichResults, message=FALSE}
+```{r case2RegEnrichResults, message=FALSE, eval=FALSE}
 res = results_score(object)
 res$name = TFs[res$reg, "TF_name"]
 res

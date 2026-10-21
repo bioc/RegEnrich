@@ -1,3 +1,7 @@
+# RegEnrich 1.22.2
+* Fixed a bug caused by downloading GEO data.
+
+
 # RegEnrich 1.22.1
 * Fixed a bug related to enricher_internal function.
 * Fixed a bug in the test script.
